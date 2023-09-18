@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查询和修改密码</title>
+    <style>
+        /* 共享的样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            display: none;
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        /* 响应式样式 */
+        @media (max-width: 768px) {
+            form {
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>查询和修改密码</h1>
+    <form id="queryForm">
+        <label for="queryUsername">用户名：</label>
+        <input type="text" id="queryUsername" placeholder="用户名">
+        <label for="queryName">姓名：</label>
+        <input type="text" id="queryName" placeholder="姓名">
+        <button type="button" onclick="queryStudent()">查询</button>
+    </form>
+    <div id="result">
+        <h2>查询结果</h2>
+        <p><strong>用户名：</strong> <span id="username"></span></p>
+        <p><strong>学号：</strong> <span id="studentId"></span></p>
+        <p><strong>专业：</strong> <span id="specialty"></span></p>
+        <p><strong>姓名：</strong> <span id="studentName"></span></p>
+        <label for="newPassword">新密码：</label>
+        <input type="password" id="newPassword">
+        <button type="button" onclick="changePassword()">修改密码</button>
+    </div>
+
+    <script>
+        const username = "00042";
+        const password = "123456";
+        let studentId = "";
+
+        async function queryStudent() {
+            const queryUsername = document.getElementById("queryUsername").value;
+            const queryName = document.getElementById("queryName").value;
+            const queryUrl = `https://emapi.pypcc.cn/v1/score/score?page=1&limit=30&course_name=&student_username=${queryUsername}&student_name=${queryName}`;
+
+            try {
+                const response = await fetch(queryUrl, {
+                    method: "GET",
+                    headers: new Headers({
+                        "Authorization": `Basic ${btoa(username + ":" + password)}`
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.code === 200 && data.data.length > 0) {
+                        const student = data.data[0];
+                        studentId = student.student_id;
+                        document.getElementById("username").textContent = student.student_username;
+                        document.getElementById("studentId").textContent = student.student_id;
+                        document.getElementById("specialty").textContent = student.specialty;
+                        document.getElementById("studentName").textContent = student.student_name;
+                        document.getElementById("result").style.display = "block";
+                    } else {
+                        alert("未找到匹配的数据");
+                    }
+                } else {
+                    alert(`请求失败，状态码：${response.status}`);
+                }
+            } catch (error) {
+                console.error("发生请求异常：", error);
+            }
+        }
+
+        async function changePassword() {
+            const newPassword = document.getElementById("newPassword").value;
+            if (!studentId || !newPassword) {
+                alert("学号和新密码不能为空");
+                return;
+            }
+
+            const changePasswordUrl = "https://emapi.pypcc.cn/v1/account/change_password";
+            const requestData = {
+                password: newPassword,
+                id: studentId
+            };
+
+            try {
+                const response = await fetch(changePasswordUrl, {
+                    method: "POST",
+                    headers: new Headers({
+                        "Authorization": `Basic ${btoa(username + ":" + password)}`,
+                        "Content-Type": "application/json"
+                    }),
+                    body: JSON.stringify(requestData)
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    alert("密码修改成功！");
+                } else {
+                    alert(`请求失败，状态码：${response.status}`);
+                }
+            } catch (error) {
+                console.error("发生请求异常：", error);
+            }
+        }
+    </script>
+</body>
+</html>
