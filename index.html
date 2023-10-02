@@ -1,211 +1,115 @@
+
+
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>查询学生信息</title>
+<html>
+ <head> 
+  <title>随身助手APP–随身空间–随身助手API-Portable assistant</title> 
+  <meta name="keywords" content="随身助手APP–随身空间–随身助手API-Portable assistant">
+    <meta name="description" content="随身助手APP–随身空间–随身助手API-Portable assistant">
+  <meta charset="utf-8" /> 
+  <meta http-equiv="content-language" content="zh-cn" /> 
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" /> 
+  <link rel="stylesheet" href="assets/css/main.css" /> 
+  <noscript> 
+   <link rel="stylesheet" href="assets/css/noscript.css" /> 
+  </noscript>
+ </head> 
+ <body class="is-preload"> 
+  <!-- Wrapper --> 
+  <div id="wrapper"> 
+   <!-- Header --> 
+   <header id="header"> 
+    <div class="icon"> 
+     <img src="favicon.ico" alt="" title="" class="logo" /> 
+    </div> 
+    <div class="content"> 
+     <div class="inner"> 
+      <h2>随身助手-随身助手APP-随身助手API-随身空间-Portable assistant</h2> 
+      
+      
+      
+      <font>1.随身助手APP:一款功能约300+的实用功能软件，集合目前最热功能，包括各种站长工具和辅助工具等是一款多功能APP。<br>
+2.随身API:存有api共274条，可供大家免费调用，随身助手api具有调用简单，响应速度快等特点。<br>
+3.随身空间:随身空间是随身助手下一个分享教程的社区，每日分享各种教程。<br>
+
+</font>
+
+     </div> 
+    </div> 
+    <nav> 
+     <ul> 
+        <li> <a target="_blank" href='https://xiaoxinwangluo.lanzouw.com/iGYMB17jhpni'>随身助手APP</a></li> 
+      <li> <a target="_blank" href="http://api.wxsszs.cn/">随身API</a></li> 
+      <li> <a target="_blank" href="http://lt.wxsszs.cn/">随身空间</a></li> 
+      <li> <a target="_blank" href="https://jq.qq.com/?_wv=1027&k=Hmhj67vt">随身助手交流群</a></li>    
+
+     </ul> 
+    </nav> 
+   </header> 
+   <!-- Footer --> 
+   <footer id="footer"> 
+<a href="https://beian.miit.gov.cn/" target="_blank">琼ICP备2022011032号-6</a>
+    <p class="copyright"><script>
+		var mydate = new Date();
+		document.writeln("Copyright&nbsp;&copy;&nbsp;2022 - "+mydate.getFullYear()+'<br />');</script></p> 
+		
+
+	
+   </footer> 
+  </div> 
+  <!-- Scripts --> 
+  <script src="assets/js/jquery.min.js"></script> 
+  <script src="assets/js/browser.min.js"></script> 
+  <script src="assets/js/breakpoints.min.js"></script> 
+  <script src="assets/js/util.js"></script> 
+  <script src="assets/js/main.js"></script> 
+  <style>canvas { padding:0; margin:0; }</style> 
+</script>  
     <style>
-        /* 共享的样式 */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        body{
             margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            color: #333;
-            margin-top: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        input[type="text"],
-        input[type="password"] {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-
-        button {
-            background-color: #007bff;
+            height: 100vh;
+            font-family: "Exo",sans-serif;
             color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
+            background: linear-gradient(-45deg,#ee7752,#e73c7e,#23a6d5,#23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        /* 样式美化 */
-        /* 表格样式 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        /* 分页样式 */
-        .pagination {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .pagination button {
-            background-color: #007bff;
-            color: #fff;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            margin: 0 5px;
-        }
-
-        .pagination button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <h1>查询学生信息</h1>
-    <form id="queryForm">
-        <label for="queryUsername">用户名：</label>
-        <input type="text" id="queryUsername" placeholder="用户名">
-        <label for="queryName">姓名：</label>
-        <input type="text" id="queryName" placeholder="姓名">
-        <button type="button" onclick="queryStudent()">查询</button>
-    </form>
-    <div id="result">
-        <!-- 成绩表格 -->
-        <h2>成绩信息</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>课程名称</th>
-                    <th>学年</th>
-                    <th>学期</th>
-                    <th>课程类别</th>
-                    <th>任课教师</th>
-                    <th>学分</th>
-                    <th>学号</th>
-                    <th>姓名</th>
-                    <th>年级</th>
-                    <th>专业</th>
-                    <th>成绩</th>
-                    <th>类别</th>
-                    <th>是否重修</th>
-                    <th>创建时间</th>
-                </tr>
-            </thead>
-            <tbody id="scoreData">
-                <!-- 这里将显示成绩数据 -->
-            </tbody>
-        </table>
-        <!-- 分页 -->
-        <div class="pagination" id="pagination">
-            <!-- 分页按钮将在这里生成 -->
-        </div>
-    </div>
-
-    <script>
-        const username = "00042";
-        const password = "123456";
-        const pageSize = 10; // 每页显示的数据量
-        let currentPage = 1; // 当前页数
-
-        async function queryStudent() {
-            // 在点击查询按钮时执行查询
-            const queryUsername = document.getElementById("queryUsername").value;
-            const queryName = document.getElementById("queryName").value;
-            const queryUrl = `https://emapi.pypcc.cn/v1/score/score?page=1&limit=30&course_name=&student_username=${queryUsername}&student_name=${queryName}`;
-
-            try {
-                const response = await fetch(queryUrl, {
-                    method: "GET",
-                    headers: new Headers({
-                        "Authorization": `Basic ${btoa(username + ":" + password)}`
-                    })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.code === 200 && data.data.length > 0) {
-                        const scoreDataJson = data; // 获取成绩数据对象
-
-                        // 获取数据总数
-                        const totalData = scoreDataJson.data.length;
-
-                        // 根据当前页数和每页显示的数量计算起始和结束索引
-                        const startIndex = (currentPage - 1) * pageSize;
-                        const endIndex = Math.min(startIndex + pageSize, totalData);
-
-                        // 清空之前的内容
-                        const scoreData = document.getElementById("scoreData");
-                        scoreData.innerHTML = "";
-
-                        // 显示部分数据
-                        for (let i = startIndex; i < endIndex; i++) {
-                            const entry = scoreDataJson.data[i];
-                            const row = document.createElement("tr");
-
-                            // 添加表格单元格并设置内容
-                            const fields = [
-                                "course_name", "course_grade", "course_semester", "course_category", "course_teacher", "course_credit",
-                                "student_username", "student_name", "grade", "specialty", "score", "category", "redo", "created_at"
-                            ];
-
-                            fields.forEach(fieldName => {
-                                const cell = document.createElement("td");
-                                cell.textContent = entry[fieldName];
-                                row.appendChild(cell);
-                            });
-
-                            scoreData.appendChild(row);
-                        }
-
-                        // 显示分页按钮
-                        const pagination = document.getElementById("pagination");
-                        pagination.innerHTML = "";
-                        const totalPages = Math.ceil(totalData / pageSize);
-                        for (let i = 1; i <= totalPages; i++) {
-                            const button = document.createElement("button");
-                            button.textContent = i;
-                            button.addEventListener("click", () => {
-                                currentPage = i;
-                                queryStudent(); // 重新查询并显示数据
-                            });
-                            pagination.appendChild(button);
-                        }
-                    }
-                } else {
-                    alert(`查询失败，状态码：${response.status}`);
-                }
-            } catch (error) {
-                console.error("发生请求异常：", error);
+        @keyframes gradientBG{
+            0%{
+                background-position: 0% 50%;
+            }
+            50%{
+                background-position: 100% 50%;
+            }
+            100%{
+                background-position: 0% 50%;
             }
         }
-
-        // 初始查询
-       
-    </script>
-</body>
+        .container{
+            width: 100%;
+            position: absolute;
+            top: 35%;
+            text-align: center;
+        }
+        h1{
+            font-weight: 300;
+        }
+        h3{
+            color: #eee;
+            font-weight: 100;
+        }
+        h5{
+            color: #eee;
+            font-weight: 300;
+        }
+        a,
+        a:hover{
+            text-decoration: none;
+            color: #ddd;
+        }
+    </style>
+ </body>
 </html>
