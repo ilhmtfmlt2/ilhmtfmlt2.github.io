@@ -20,15 +20,5 @@
 ## 采用的API接口参考
 [EpicResearch](https://github.com/MixV2/EpicResearch)
 
-
-
-## 🔭最近关注
-
-这里展示的是最近Star了项目的用户
-
-[![Stargazers repo roster for @1250422131/1250422131](https://reporoster.com/stars/ilhmtfmlt2/Epic-Games)](https://github.com/ilhmtfmlt2/ilhmtfmlt2.github.io/stargazers)
-
-
-
 ## 问题反馈
 ![BlueskyClouds’s github stats](https://github-readme-stats.vercel.app/api?username=ilhmtfmlt2&show_icons=true&theme=merko)
