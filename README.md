@@ -1,6 +1,6 @@
 <div align="center">
 
-![](https://raw.githubusercontent.com/ilhmtfmlt2/ilhmtfmlt2.github.io/main/favicon.ico)
+![](https://raw.githubusercontent.com/ilhmtfmlt2/ilhmtfmlt2.github.io/main/icon.jpg)
 
 # 濮阳石油化工职业技术学院成绩查询系统
 
