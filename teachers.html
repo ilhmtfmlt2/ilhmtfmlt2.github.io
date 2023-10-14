@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查询教师信息</title>
+    <style>
+        /* 共享的样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* 筛选条件样式 */
+        #filterOptions {
+            margin-bottom: 20px;
+        }
+
+        #filterOptions select, #filterOptions input {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>查询教师信息</h1>
+    <div id="filterOptions">
+        <label for="genderFilter">性别：</label>
+        <select id="genderFilter">
+            <option value="">全部</option>
+            <option value="男">男</option>
+            <option value="女">女</option>
+        </select>
+        <label for="identityFilter">身份：</label>
+        <input type="text" id="identityFilter">
+        <label for="departmentFilter">院系：</label>
+        <input type="text" id="departmentFilter">
+        <label for="entryYearFilter">入学年份：</label>
+        <input type="text" id="entryYearFilter">
+        <label for="nameFilter">姓名：</label>
+        <input type="text" id="nameFilter">
+        <button type="button" onclick="filterTeachers()">筛选</button>
+        <button type="button" onclick="clearFilter()">清除筛选</button>
+    </div>
+    <div id="result">
+        <!-- 教师信息表格 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>教师编号</th>
+                    <th>用户名</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>身份</th>
+                    <th>院系</th>
+                    <th>入学年份</th>
+                </tr>
+            </thead>
+            <tbody id="teacherData">
+                <!-- 这里将显示教师信息数据 -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const username = "00042";
+        const password = "123456";
+        let teacherDataJson = null;
+
+        async function queryTeacher() {
+            const queryUrl = "https://emapi.pypcc.cn/v1/account/teacher/";
+
+            try {
+                const response = await fetch(queryUrl, {
+                    method: "GET",
+                    headers: new Headers({
+                        "Authorization": `Basic ${btoa(username + ":" + password)}`
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.code === 200 && data.data.length > 0) {
+                        teacherDataJson = data; // 获取教师信息数据对象
+                        displayTeachers(teacherDataJson.data);
+                    }
+                } else {
+                    alert(`查询失败，状态码：${response.status}`);
+                }
+            } catch (error) {
+                console.error("发生请求异常：", error);
+            }
+        }
+
+        function displayTeachers(data) {
+            const teacherDataElement = document.getElementById("teacherData");
+            teacherDataElement.innerHTML = "";
+
+            data.forEach(entry => {
+                const row = document.createElement("tr");
+                const fields = ["id", "username", "name", "gender", "identity", "department.name_academy", "entry_year"];
+
+                fields.forEach(fieldName => {
+                    const cell = document.createElement("td");
+                    if (fieldName === "id") {
+                        cell.textContent = entry[fieldName];
+                    } else if (fieldName === "department.name_academy") {
+                        cell.textContent = entry.department.name_academy;
+                    } else if (fieldName === "gender") {
+                        cell.textContent = entry.gender === "M" ? "男" : "女";
+                    } else {
+                        cell.textContent = entry[fieldName];
+                    }
+                    row.appendChild(cell);
+                });
+
+                teacherDataElement.appendChild(row);
+            });
+        }
+
+        function filterTeachers() {
+            const genderFilter = document.getElementById("genderFilter").value;
+            const identityFilter = document.getElementById("identityFilter").value.toLowerCase();
+            const departmentFilter = document.getElementById("departmentFilter").value.toLowerCase();
+            const entryYearFilter = document.getElementById("entryYearFilter").value.toLowerCase();
+            const nameFilter = document.getElementById("nameFilter").value.toLowerCase();
+
+            const filteredData = teacherDataJson.data.filter(teacher => {
+                return (genderFilter === "" || (teacher.gender === "M" && genderFilter === "男") || (teacher.gender === "F" && genderFilter === "女")) &&
+                       (identityFilter === "" || teacher.identity.toLowerCase().includes(identityFilter)) &&
+                       (departmentFilter === "" || teacher.department.name_academy.toLowerCase().includes(departmentFilter)) &&
+                       (entryYearFilter === "" || teacher.entry_year.toString().toLowerCase().includes(entryYearFilter)) &&
+                       (nameFilter === "" || teacher.name.toLowerCase().includes(nameFilter));
+            });
+
+            displayTeachers(filteredData);
+        }
+
+        function clearFilter() {
+            document.getElementById("genderFilter").value = "";
+            document.getElementById("identityFilter").value = "";
+            document.getElementById("departmentFilter").value = "";
+            document.getElementById("entryYearFilter").value = "";
+            document.getElementById("nameFilter").value = "";
+            displayTeachers(teacherDataJson.data);
+        }
+
+        // 页面加载后默认执行查询
+        window.onload = queryTeacher;
+    </script>
+</body>
+</html>
