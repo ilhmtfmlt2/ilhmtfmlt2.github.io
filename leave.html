@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查询请假信息</title>
+    <style>
+        /* 共享的样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* 筛选条件样式 */
+        #filterOptions {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+        }
+
+        #filterOptions select, #filterOptions input {
+            margin-right: 10px;
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        /* 按钮样式 */
+        #filterOptions button {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #filterOptions button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 改进假期原因输入框样式 */
+        #reasonFilter {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>查询请假信息</h1>
+    <div id="filterOptions">
+        <label for="reasonFilter">假期原因：</label>
+        <input type="text" id="reasonFilter" class="filter-input">
+        <label for="approvalFilter">审批状态：</label>
+        <select id="approvalFilter">
+            <option value="">全部</option>
+            <option value="同意">同意</option>
+            <option value="不同意">不同意</option>
+        </select>
+        <button type="button" onclick="filterLeaves()">筛选</button>
+        <button type="button" onclick="clearFilter()">清除筛选</button>
+    </div>
+    <div id="result">
+        <!-- 请假信息表格 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>年级</th>
+                    <th>年级名称</th>
+                    <th>学期</th>
+                    <th>学生号</th>
+                    <th>用户名</th>
+                    <th>姓名</th>
+                    <th>班级</th>
+                    <th>假期原因</th>
+                    <th>审批状态</th>
+                </tr>
+            </thead>
+            <tbody id="leaveData">
+                <!-- 这里将显示请假信息数据 -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const username = "00042";
+        const password = "123456";
+        let leaveDataJson = null;
+
+        async function queryLeaves() {
+            const queryUrl = "https://emapi.pypcc.cn/v1/score/probation/?format=json";
+
+            try {
+                const response = await fetch(queryUrl, {
+                    method: "GET",
+                    headers: new Headers({
+                        "Authorization": `Basic ${btoa(username + ":" + password)}`
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.code === 200 && data.data.length > 0) {
+                        leaveDataJson = data.data; // 获取请假信息数据对象
+                        displayLeaves(leaveDataJson);
+                    }
+                } else {
+                    alert(`查询失败，状态码：${response.status}`);
+                }
+            } catch (error) {
+                console.error("发生请求异常：", error);
+            }
+        }
+
+        function displayLeaves(data) {
+            const leaveDataElement = document.getElementById("leaveData");
+            leaveDataElement.innerHTML = "";
+
+            data.forEach(entry => {
+                const row = document.createElement("tr");
+                const fields = ["id", "grade", "grade_name", "semester", "student", "username", "name", "classNo", "reason", "isapprover"];
+
+                fields.forEach(fieldName => {
+                    const cell = document.createElement("td");
+                    cell.textContent = entry[fieldName];
+                    row.appendChild(cell);
+                });
+
+                leaveDataElement.appendChild(row);
+            });
+        }
+
+        function filterLeaves() {
+            const reasonFilter = document.getElementById("reasonFilter").value.toLowerCase();
+            const approvalFilter = document.getElementById("approvalFilter").value.toLowerCase();
+
+            const filteredData = leaveDataJson.filter(leave => {
+                return (reasonFilter === "" || leave.reason.toLowerCase().includes(reasonFilter)) &&
+                    (approvalFilter === "" || leave.isapprover.toLowerCase() === approvalFilter);
+            });
+
+            displayLeaves(filteredData);
+        }
+
+        function clearFilter() {
+            document.getElementById("reasonFilter").value = "";
+            document.getElementById("approvalFilter").value = "";
+            displayLeaves(leaveDataJson);
+        }
+
+        // 页面加载后默认执行查询
+        window.onload = queryLeaves;
+    </script>
+</body>
+</html>
