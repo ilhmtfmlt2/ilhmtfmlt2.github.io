@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查询排行榜</title>
+    <style>
+        /* 共享的样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        /* 筛选条件样式 */
+        #filterOptions {
+            margin: 20px auto;
+            width: 80%;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #filterOptions input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+
+        #filterOptions button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        #filterOptions button:hover {
+            background-color: #0073e6;
+        }
+    </style>
+</head>
+<body>
+    <h1>排行榜</h1>
+    <div id="filterOptions">
+        <label for="searchInput">搜索玩家：</label>
+        <input type="text" id="searchInput" class="filter-input">
+        <button type="button" onclick="searchLeaderboard()">搜索</button>
+        <button type="button" onclick="clearSearch()">清除搜索</button>
+    </div>
+    <div id="result">
+        <!-- 排行榜表格 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>排名</th>
+                    <th>玩家</th>
+                    <th>分数</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardData">
+                <!-- 这里将显示排行榜数据 -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // 模拟本地数据，实际中应从服务器或本地存储中获取数据
+        let leaderboardData = [
+{ rank: 6, player: '刘方倬', score: 0 },
+{ rank: 7, player: '张恒源', score: 0 },
+{ rank: 8, player: '郝人慧', score: 0 },
+{ rank: 9, player: '陈嘉文', score: 0 },
+{ rank: 10, player: '杨浩康', score: 0 },
+{ rank: 11, player: '刘艺博', score: 0 },
+{ rank: 12, player: '李朕贺', score: 0 },
+{ rank: 13, player: '韩健', score: 0 },
+{ rank: 14, player: '袁豫玺', score: 0 },
+{ rank: 15, player: '孙朝博', score: 0 },
+{ rank: 16, player: '时名川', score: 0 },
+{ rank: 17, player: '孙念', score: 0 },
+{ rank: 18, player: '丁耀阳', score: 0 },
+{ rank: 19, player: '张家瑞', score: 0 },
+{ rank: 20, player: '葛爱国', score: 0 },
+{ rank: 21, player: '季怀博', score: 0 },
+{ rank: 22, player: '任秉喆', score: 0 },
+{ rank: 23, player: '郭强', score: 0 },
+{ rank: 24, player: '刘书豪', score: 0 },
+{ rank: 25, player: '张海洋', score: 0 },
+{ rank: 26, player: '龚岭帆', score: 0 },
+{ rank: 27, player: '王一豪', score: 0 },
+{ rank: 28, player: '刘磊鑫', score: 0 },
+{ rank: 29, player: '李欣澄', score: 0 },
+{ rank: 30, player: '张翔', score: 0 },
+{ rank: 31, player: '李子龙', score: 0 },
+{ rank: 32, player: '袁梦凡', score: 0 },
+{ rank: 33, player: '王夕月', score: 0 },
+{ rank: 34, player: '冯文启', score: 0 },
+{ rank: 35, player: '徐贵', score: 0 },
+{ rank: 36, player: '余洋', score: 0 },
+{ rank: 37, player: '宋志恒', score: 0 },
+{ rank: 38, player: '徐亚峰', score: 0 },
+{ rank: 39, player: '刘洹铭', score: 0 },
+{ rank: 40, player: '王俊杰', score: 0 },
+{ rank: 41, player: '赛景航', score: 0 },
+{ rank: 42, player: '刘庆涵', score: 0 },
+{ rank: 43, player: '刘志高', score: 0 },
+{ rank: 44, player: '范冰涛', score: 0 },
+{ rank: 45, player: '郝奕兵', score: 0 },
+{ rank: 46, player: '陈令特', score: 0 },
+{ rank: 47, player: '王岩', score: 0 },
+{ rank: 48, player: '王国福', score: 0 },
+{ rank: 49, player: '刘力源', score: 0 },
+{ rank: 50, player: '张凯翔', score: 0 },
+{ rank: 51, player: '刘毅轩', score: 0 },
+{ rank: 52, player: '吴奕进', score: 0 },
+{ rank: 53, player: '冯帅帅', score: 0 },
+{ rank: 54, player: '张旭阳', score: 0 },
+{ rank: 55, player: '陈尚林', score: 0 },
+{ rank: 56, player: '杨景浩', score: 0 },
+{ rank: 57, player: '杨亚欣', score: 100 },
+{ rank: 58, player: '李佳玮', score: 0 },
+{ rank: 59, player: '郑梓阳', score: 0 },
+{ rank: 60, player: '褚博文', score: 0 },
+{ rank: 61, player: '陈国豪', score: 0 },
+{ rank: 62, player: '罗静婷', score: 0 },
+{ rank: 63, player: '黄嘉星', score: 0 },
+{ rank: 64, player: '郝阳浩', score: 0 },
+{ rank: 65, player: '黄滢宗', score: 0 }
+        ];
+
+        function displayLeaderboard(data) {
+            const leaderboardDataElement = document.getElementById("leaderboardData");
+            leaderboardDataElement.innerHTML = "";
+
+            data.forEach(entry => {
+                const row = document.createElement("tr");
+                const fields = ["rank", "player", "score"];
+
+                fields.forEach(fieldName => {
+                    const cell = document.createElement("td");
+                    cell.textContent = entry[fieldName];
+                    row.appendChild(cell);
+                });
+
+                leaderboardDataElement.appendChild(row);
+            });
+        }
+
+        function searchLeaderboard() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const filteredData = leaderboardData.filter(entry => entry.player.toLowerCase().includes(searchInput));
+            displayLeaderboard(filteredData);
+        }
+
+        function clearSearch() {
+            document.getElementById("searchInput").value = "";
+            displayLeaderboard(leaderboardData);
+        }
+        
+        // 页面加载后默认显示排行榜
+        window.onload = function() {
+            // 初始加载时按分数高低排序
+            leaderboardData = leaderboardData.sort((a, b) => b.score - a.score);
+            displayLeaderboard(leaderboardData);
+        };
+    </script>
+</body>
+</html>
+
