@@ -88,7 +88,10 @@
                 <tr>
                     <th>排名</th>
                     <th>玩家</th>
-                    <th>分数</th>
+                    <th>专业</th>
+                    <th>性别</th>
+                    <th>手机号</th>
+                    <th>得分</th>
                 </tr>
             </thead>
             <tbody id="leaderboardData">
@@ -100,75 +103,96 @@
     <script>
         // 模拟本地数据，实际中应从服务器或本地存储中获取数据
         let leaderboardData = [
-{ rank: 6, player: '刘方倬', score: 0 },
-{ rank: 7, player: '张恒源', score: 0 },
-{ rank: 8, player: '郝人慧', score: 0 },
-{ rank: 9, player: '陈嘉文', score: 0 },
-{ rank: 10, player: '杨浩康', score: 0 },
-{ rank: 11, player: '刘艺博', score: 0 },
-{ rank: 12, player: '李朕贺', score: 0 },
-{ rank: 13, player: '韩健', score: 0 },
-{ rank: 14, player: '袁豫玺', score: 0 },
-{ rank: 15, player: '孙朝博', score: 0 },
-{ rank: 16, player: '时名川', score: 0 },
-{ rank: 17, player: '孙念', score: 0 },
-{ rank: 18, player: '丁耀阳', score: 0 },
-{ rank: 19, player: '张家瑞', score: 0 },
-{ rank: 20, player: '葛爱国', score: 0 },
-{ rank: 21, player: '季怀博', score: 0 },
-{ rank: 22, player: '任秉喆', score: 0 },
-{ rank: 23, player: '郭强', score: 0 },
-{ rank: 24, player: '刘书豪', score: 0 },
-{ rank: 25, player: '张海洋', score: 0 },
-{ rank: 26, player: '龚岭帆', score: 0 },
-{ rank: 27, player: '王一豪', score: 0 },
-{ rank: 28, player: '刘磊鑫', score: 0 },
-{ rank: 29, player: '李欣澄', score: 0 },
-{ rank: 30, player: '张翔', score: 0 },
-{ rank: 31, player: '李子龙', score: 0 },
-{ rank: 32, player: '袁梦凡', score: 0 },
-{ rank: 33, player: '王夕月', score: 0 },
-{ rank: 34, player: '冯文启', score: 0 },
-{ rank: 35, player: '徐贵', score: 0 },
-{ rank: 36, player: '余洋', score: 0 },
-{ rank: 37, player: '宋志恒', score: 0 },
-{ rank: 38, player: '徐亚峰', score: 0 },
-{ rank: 39, player: '刘洹铭', score: 0 },
-{ rank: 40, player: '王俊杰', score: 0 },
-{ rank: 41, player: '赛景航', score: 0 },
-{ rank: 42, player: '刘庆涵', score: 0 },
-{ rank: 43, player: '刘志高', score: 0 },
-{ rank: 44, player: '范冰涛', score: 0 },
-{ rank: 45, player: '郝奕兵', score: 0 },
-{ rank: 46, player: '陈令特', score: 0 },
-{ rank: 47, player: '王岩', score: 0 },
-{ rank: 48, player: '王国福', score: 0 },
-{ rank: 49, player: '刘力源', score: 0 },
-{ rank: 50, player: '张凯翔', score: 0 },
-{ rank: 51, player: '刘毅轩', score: 0 },
-{ rank: 52, player: '吴奕进', score: 0 },
-{ rank: 53, player: '冯帅帅', score: 0 },
-{ rank: 54, player: '张旭阳', score: 0 },
-{ rank: 55, player: '陈尚林', score: 0 },
-{ rank: 56, player: '杨景浩', score: 0 },
-{ rank: 57, player: '杨亚欣', score: 100 },
-{ rank: 58, player: '李佳玮', score: 0 },
-{ rank: 59, player: '郑梓阳', score: 0 },
-{ rank: 60, player: '褚博文', score: 0 },
-{ rank: 61, player: '陈国豪', score: 0 },
-{ rank: 62, player: '罗静婷', score: 0 },
-{ rank: 63, player: '黄嘉星', score: 0 },
-{ rank: 64, player: '郝阳浩', score: 0 },
-{ rank: 65, player: '黄滢宗', score: 0 }
+          { player: '赵凯瑞', major: '智能控制', gender: '男', phone: '13124446931', score: 0 },
+{ player: '韩健', major: '23级工业互联网一班', gender: '男', phone: '15539359868', score: 0 },
+{ player: '郝人慧', major: '材料工程', gender: '女', phone: '18839711682', score: 0 },
+{ player: '李成', major: '油气智能开采', gender: '男', phone: '15729297985', score: 0 },
+{ player: '李佳玮', major: '油气储运', gender: '男', phone: '18657719127', score: 0 },
+{ player: '李欣澄', major: '氢能技术应用', gender: '男', phone: '16639130925', score: 0 },
+{ player: '李朕贺', major: '石油化工', gender: '男', phone: '15516641720', score: 0 },
+{ player: '李子龙', major: '油气储运', gender: '男', phone: '17803995110', score: 0 },
+{ player: '刘磊鑫', major: '油气智能开采技术一班', gender: '男', phone: '15738569112', score: 0 },
+{ player: '刘艺博', major: '涂装防护技术一班', gender: '男', phone: '15837163237', score: 0 },
+{ player: '刘毅轩', major: '石油化工', gender: '男', phone: '17337425867', score: 0 },
+{ player: '赛景航', major: '涂装防护一班', gender: '男', phone: '13461788024', score: 0 },
+{ player: '孙念', major: '涂装防护一班', gender: '男', phone: '16650023100', score: 0 },
+{ player: '王俊杰', major: '化工生物技术', gender: '男', phone: '18272579617', score: 0 },
+{ player: '王一豪', major: '油气储运', gender: '男', phone: '13698821619', score: 0 },
+{ player: '徐贵', major: '化工生物技术(1)班', gender: '男', phone: '18486581587', score: 0 },
+{ player: '杨景浩', major: '油气储运', gender: '男', phone: '15139473674', score: 0 },
+{ player: '杨亚欣', major: '电子商务', gender: '女', phone: '15286920121', score: 100 },
+{ player: '余洋', major: '化工生物技术', gender: '男', phone: '17339366232', score: 0 },
+{ player: '袁豫玺', major: '氢能技术应用一班', gender: '男', phone: '13949336039', score: 0 },
+{ player: '张海洋', major: '新能源装备技术', gender: '男', phone: '13569570465', score: 0 },
+{ player: '张家瑞', major: '分析检验', gender: '男', phone: '19837911138', score: 0 },
+{ player: '张凯翔', major: '石油工程三班', gender: '男', phone: '18439623120', score: 0 },
+{ player: '张翔', major: '管道运输管理', gender: '男', phone: '15890142537', score: 0 },
+{ player: '张旭阳', major: '化工生物', gender: '男', phone: '18595753309', score: 0 },
+{ player: '陈嘉文', major: '石油化工', gender: '男', phone: '17638078200', score: 0 },
+{ player: '冯文启', major: '石油工程二班', gender: '男', phone: '15839103698', score: 0 },
+{ player: '龚岭帆', major: '石油工程技术', gender: '男', phone: '18236038820', score: 0 },
+{ player: '郝阳浩', major: '石油工程技术', gender: '男', phone: '18339940647', score: 0 },
+{ player: '黄嘉星', major: '机电一体化', gender: '男', phone: '18239251881', score: 0 },
+{ player: '刘泓麟', major: '大数据与财务管理2班', gender: '男', phone: '18239089530', score: 0 },
+{ player: '刘洹铭', major: '油气储运', gender: '男', phone: '15803915043', score: 0 },
+{ player: '毛家兴', major: '大数据与财务管理2班', gender: '男', phone: '15838926705', score: 0 },
+{ player: '齐钰麟', major: '油气智能开采', gender: '男', phone: '13069394519', score: 0 },
+{ player: '秦苏鹏', major: '大数据与财务管理', gender: '男', phone: '15516095751', score: 0 },
+{ player: '时名川', major: '石油工程', gender: '男', phone: '1918333775', score: 0 },
+{ player: '宋志恒', major: '油气储运技术4班', gender: '男', phone: '15537819931', score: 0 },
+{ player: '王国福', major: '材料工程', gender: '男', phone: '19171296650', score: 0 },
+{ player: '王惠政', major: '大数据技术', gender: '男', phone: '19158027457', score: 0 },
+{ player: '王文奇', major: '石油工程技术', gender: '男', phone: '15670167551', score: 0 },
+{ player: '王勋', major: '数控技术', gender: '男', phone: '18537628689', score: 0 },
+{ player: '王岩', major: '油气储运技术', gender: '男', phone: '15293861566', score: 0 },
+{ player: '王玉坤', major: '材料工程技术', gender: '男', phone: '15039461279', score: 0 },
+{ player: '王子斌', major: '大数据与财务管理2班', gender: '男', phone: '17623726092', score: 0 },
+{ player: '吴奕进', major: '机电一体化', gender: '男', phone: '13346638425', score: 0 },
+{ player: '许海涛', major: '石油化工', gender: '男', phone: '18236167280', score: 0 },
+{ player: '杨浩康', major: '石油化工技术', gender: '男', phone: '19836162515', score: 0 },
+{ player: '杨冉冉', major: '新能源装备技术', gender: '男', phone: '19233716708', score: 0 },
+{ player: '臧雪辉', major: '管道运输管理', gender: '男', phone: '17337305698', score: 0 },
+{ player: '张鑫晖', major: '数控技术', gender: '男', phone: '18300647426', score: 0 },
+{ player: '赵凯瑞', major: '智能控制', gender: '男', phone: '13124446931', score: 0 },
+{ player: '赵相怿', major: '新能源装备技术', gender: '男', phone: '17656165767', score: 0 },
+{ player: '郑梓阳', major: '油气储运3班', gender: '男', phone: '18236857601', score: 0 },
+{ player: '陈令特', major: '化工生物技术', gender: '男', phone: '18739702659', score: 0 },
+{ player: '陈昭兵', major: '氢能技术应用', gender: '男', phone: '19137617916', score: 0 },
+{ player: '郭金铭', major: '氢能技术与应用', gender: '男', phone: '15237379015', score: 0 },
+{ player: '郭强', major: '油气储运', gender: '男', phone: '13098187157', score: 0 },
+{ player: '韩健', major: '23级工业互联网一班', gender: '男', phone: '15539359868', score: 0 },
+{ player: '郝奕兵', major: '机电一体化', gender: '男', phone: '15903905728', score: 0 },
+{ player: '刘书豪', major: '油气储运', gender: '男', phone: '17516270829', score: 0 },
+{ player: '刘志高', major: '工业互联网', gender: '男', phone: '15670109917', score: 0 },
+{ player: '潘晨焱', major: '石油工程3班', gender: '男', phone: '17639352666', score: 0 },
+{ player: '任秉喆', major: '23工业互联网一班', gender: '男', phone: '18537241680', score: 0 },
+{ player: '王子豪', major: '精细化工一班', gender: '男', phone: '15239393565', score: 0 },
+{ player: '魏明帅', major: '油气储运', gender: '男', phone: '17528307961', score: 0 },
+{ player: '陈国豪', major: '油气地质勘探', gender: '男', phone: '13598358752', score: 0 },
+{ player: '赵国栋', major: '精细化工', gender: '男', phone: '16603982067', score: 0 },
+{ player: '张子轩', major: '石油化工', gender: '女', phone: '15516119373', score: 0 },
+{ player: '张国鑫', major: '氢能技术应用', gender: '男', phone: '15539872085', score: 0 },
+{ player: '袁梦凡', major: '软件技术', gender: '男', phone: '15794619996', score: 0 },
+{ player: '杨子辰', major: '石油化工技术', gender: '女', phone: '17324958967', score: 0 },
+{ player: '孙朝博', major: '工业互联网', gender: '男', phone: '13461623315', score: 0 },
+{ player: '徐江林', major: '大数据技术一班', gender: '男', phone: '15936882320', score: 0 }
         ];
 
         function displayLeaderboard(data) {
             const leaderboardDataElement = document.getElementById("leaderboardData");
             leaderboardDataElement.innerHTML = "";
 
+            // 对数据根据分数高低进行排序
+            data.sort((a, b) => b.score - a.score);
+
+            // 为排名分配数字（从1开始）
+            data.forEach((entry, index) => {
+                entry.rank = index + 1;
+            });
+
             data.forEach(entry => {
                 const row = document.createElement("tr");
-                const fields = ["rank", "player", "score"];
+                const fields = ["rank", "player", "major", "gender", "phone", "score"];
 
                 fields.forEach(fieldName => {
                     const cell = document.createElement("td");
@@ -193,11 +217,8 @@
         
         // 页面加载后默认显示排行榜
         window.onload = function() {
-            // 初始加载时按分数高低排序
-            leaderboardData = leaderboardData.sort((a, b) => b.score - a.score);
             displayLeaderboard(leaderboardData);
         };
     </script>
 </body>
 </html>
-
