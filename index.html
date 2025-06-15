@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES-256-CBC 安全文本加密</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0071e3;
+            --primary-hover: #0077ed;
+            --bg-color: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-color: #1d1d1f;
+            --text-secondary: #86868b;
+            --border-color: #d2d2d7;
+            --success-color: #34c759;
+            --error-color: #ff3b30;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9ff, #f0f5ff);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px 0;
+            max-width: 800px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #0071e3, #2997ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            max-width: 700px;
+            margin: 0 auto 20px;
+            line-height: 1.7;
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(0, 113, 227, 0.1);
+            color: var(--primary-color);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .security-badge i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            padding: 35px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 28px;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        .card-title .icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #0071e3, #2997ff);
+            margin-right: 18px;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 1.05rem;
+        }
+
+        textarea, input {
+            width: 100%;
+            padding: 17px;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            font-size: 1.05rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            transition: all 0.25s;
+        }
+
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
+        }
+
+        textarea {
+            min-height: 170px;
+            resize: vertical;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 17px;
+            top: 17px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .password-toggle:hover {
+            opacity: 1;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            background: linear-gradient(to right, #0071e3, #2997ff);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 18px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 113, 227, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0, 113, 227, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn .icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .result-container {
+            position: relative;
+            margin-top: 25px;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .result-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .copy-btn {
+            background: rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 18px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn:hover {
+            background: rgba(0, 113, 227, 0.05);
+            color: var(--primary-color);
+            border-color: rgba(0, 113, 227, 0.3);
+        }
+
+        .copy-btn i {
+            font-size: 0.9rem;
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 18px;
+            margin-top: 20px;
+            border-radius: 15px;
+            font-weight: 500;
+            display: none;
+            font-size: 1.05rem;
+        }
+
+        .success {
+            background-color: rgba(52, 199, 89, 0.1);
+            color: var(--success-color);
+            display: block;
+        }
+
+        .error {
+            background-color: rgba(255, 59, 48, 0.1);
+            color: var(--error-color);
+            display: block;
+        }
+
+        .password-strength {
+            height: 6px;
+            border-radius: 3px;
+            background: #e0e0e0;
+            margin: 15px 0 25px;
+            overflow: hidden;
+        }
+
+        .strength-meter {
+            height: 100%;
+            width: 0;
+            transition: width 0.5s;
+        }
+
+        .weak { background: var(--error-color); width: 30%; }
+        .medium { background: #ffcc00; width: 60%; }
+        .strong { background: var(--success-color); width: 100%; }
+
+        .action-row {
+            display: flex;
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .action-row .btn {
+            width: auto;
+            flex: 1;
+        }
+
+        .secondary-btn {
+            background: #f0f0f5;
+            color: #666;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .secondary-btn:hover {
+            background: #e5e5ea;
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            header {
+                padding: 20px 10px 0;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+            
+            .action-row {
+                flex-direction: column;
+            }
+            
+            .action-row .btn {
+                width: 100%;
+            }
+            
+            .card-title {
+                font-size: 1.4rem;
+            }
+            
+            .card-title .icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .card {
+                padding: 20px 18px;
+                border-radius: 20px;
+            }
+            
+            .card-title {
+                font-size: 1.3rem;
+                margin-bottom: 20px;
+            }
+            
+            .btn {
+                padding: 16px;
+                font-size: 1.05rem;
+            }
+            
+            header h1 {
+                font-size: 1.9rem;
+            }
+            
+            header p {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>文本加密工具</h1>
+            <p>使用AES-256-CBC加密-CB标准。所有操作均在浏览器中完成，数据不会发送到服务器。</p>
+            <div class="security-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>端到端加密 · 本地处理 · 安全可靠</span>
+            </div>
+        </header>
+        
+        <div class="cards-container">
+            <div class="card">
+                <div class="card-title">
+                    <div class="icon"><i class="fas fa-lock"></i></div>
+                    <h2>加密文本</h2>
+                </div>
+                
+                <div class="input-group">
+                    <label for="plaintext">输入要加密的文本：</label>
+                    <textarea id="plaintext" placeholder="在此输入您的敏感信息，如密码、个人信息等..." autocomplete="off"></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label for="encryptPassword">设置加密密码：</label>
+                    <div class="password-container">
+                        <input type="password" id="encryptPassword" placeholder="设置一个强密码（至少8个字符）" autocomplete="off">
+                        <button class="password-toggle" onclick="togglePassword('encryptPassword')">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="confirmPassword">确认加密密码：</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" placeholder="再次输入密码以确保正确" autocomplete="off">
+                        <button class="password-toggle" onclick="togglePassword('confirmPassword')">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="password-strength">
+                    <div class="strength-meter" id="strengthMeter"></div>
+                </div>
+                
+                <button class="btn" onclick="encryptText()">
+                    <i class="fas fa-key"></i> 加密文本
+                </button>
+                
+                <div class="result-container" style="display: none;" id="encryptResultContainer">
+                    <div class="result-header">
+                        <h3><i class="fas fa-lock"></i> 加密结果</h3>
+                        <button class="copy-btn" onclick="copyText('encryptedText')">
+                            <i class="far fa-copy"></i> 复制
+                        </button>
+                    </div>
+                    <textarea id="encryptedText" readonly></textarea>
+                </div>
+                
+                <div class="status-message" id="encryptStatus"></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">
+                    <div class="icon"><i class="fas fa-lock-open"></i></div>
+                    <h2>解密文本</h2>
+                </div>
+                
+                <div class="input-group">
+                    <label for="ciphertext">输入要解密的文本：</label>
+                    <textarea id="ciphertext" placeholder="在此粘贴加密后的文本..." autocomplete="off"></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label for="decryptPassword">输入解密密码：</label>
+                    <div class="password-container">
+                        <input type="password" id="decryptPassword" placeholder="输入加密时使用的密码" autocomplete="off">
+                        <button class="password-toggle" onclick="togglePassword('decryptPassword')">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="decryptText()">
+                    <i class="fas fa-unlock"></i> 解密文本
+                </button>
+                
+                <div class="result-container" style="display: none;" id="decryptResultContainer">
+                    <div class="result-header">
+                        <h3><i class="fas fa-file-alt"></i> 解密结果</h3>
+                        <button class="copy-btn" onclick="copyText('decryptedText')">
+                            <i class="far fa-copy"></i> 复制
+                        </button>
+                    </div>
+                    <textarea id="decryptedText" readonly></textarea>
+                </div>
+                
+                <div class="status-message" id="decryptStatus"></div>
+            </div>
+        </div>
+        
+        <div class="action-row">
+            <button class="btn secondary-btn" onclick="clearAll()">
+                <i class="fas fa-broom"></i> 清除所有内容
+            </button>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p><i class="fas fa-lock"></i> 使用 AES-256-CBC 标准 | 本地处理 | 设计灵感来自 Apple 美学</p>
+            <p style="margin-top: 8px; font-size: 0.9rem;">&copy; 2025 文本加密工具 | 所有操作在浏览器中完成，无数据上传</p>
+        </div>
+    </footer>
+    
+    <script>
+        // 切换密码可见性
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const toggleIcon = input.nextElementSibling.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+        
+        // 加密文本
+        function encryptText() {
+            const plaintext = document.getElementById('plaintext').value;
+            const password = document.getElementById('encryptPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            const statusEl = document.getElementById('encryptStatus');
+            statusEl.className = 'status-message';
+            
+            // 验证输入
+            if (!plaintext) {
+                showStatus(statusEl, '请输入要加密的文本', 'error');
+                return;
+            }
+            
+            if (!password || !confirmPassword) {
+                showStatus(statusEl, '请设置并确认密码', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showStatus(statusEl, '两次输入的密码不匹配', 'error');
+                return;
+            }
+            
+            if (password.length < 8) {
+                showStatus(statusEl, '密码长度至少需要8个字符', 'error');
+                return;
+            }
+            
+            try {
+                // 生成随机盐
+                const salt = CryptoJS.lib.WordArray.random(16);
+                
+                // 使用PBKDF2派生密钥
+                const key = CryptoJS.PBKDF2(password, salt, {
+                    keySize: 256 / 32,
+                    iterations: 100000
+                });
+                
+                // 生成随机IV
+                const iv = CryptoJS.lib.WordArray.random(16);
+                
+                // 使用AES-256-CBC加密
+                const encrypted = CryptoJS.AES.encrypt(plaintext, key, {
+                    iv: iv,
+                    mode: CryptoJS.mode.CBC,
+                    padding: CryptoJS.pad.Pkcs7
+                });
+                
+                // 组合盐、IV和密文
+                const result = {
+                    ct: encrypted.ciphertext.toString(CryptoJS.enc.Base64),
+                    iv: iv.toString(CryptoJS.enc.Base64),
+                    s: salt.toString(CryptoJS.enc.Base64)
+                };
+                
+                // 转换为JSON字符串
+                const encryptedString = JSON.stringify(result);
+                
+                // 显示结果
+                document.getElementById('encryptedText').value = encryptedString;
+                document.getElementById('encryptResultContainer').style.display = 'block';
+                
+                // 自动滚动到结果
+                document.getElementById('encryptResultContainer').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest' 
+                });
+                
+                showStatus(statusEl, '文本已成功加密！复制加密内容保存到安全的地方', 'success');
+            } catch (error) {
+                console.error('加密错误:', error);
+                showStatus(statusEl, '加密过程中发生错误: ' + error.message, 'error');
+            }
+        }
+        
+        // 解密文本
+        function decryptText() {
+            const ciphertext = document.getElementById('ciphertext').value;
+            const password = document.getElementById('decryptPassword').value;
+            
+            const statusEl = document.getElementById('decryptStatus');
+            statusEl.className = 'status-message';
+            
+            // 验证输入
+            if (!ciphertext) {
+                showStatus(statusEl, '请输入要解密的文本', 'error');
+                return;
+            }
+            
+            if (!password) {
+                showStatus(statusEl, '请输入解密密码', 'error');
+                return;
+            }
+            
+            try {
+                // 解析加密数据
+                const encryptedData = JSON.parse(ciphertext);
+                
+                // 提取盐、IV和密文
+                const salt = CryptoJS.enc.Base64.parse(encryptedData.s);
+                const iv = CryptoJS.enc.Base64.parse(encryptedData.iv);
+                const ciphertextBytes = CryptoJS.enc.Base64.parse(encryptedData.ct);
+                
+                // 使用PBKDF2派生密钥
+                const key = CryptoJS.PBKDF2(password, salt, {
+                    keySize: 256 / 32,
+                    iterations: 100000
+                });
+                
+                // 创建加密参数
+                const cipherParams = CryptoJS.lib.CipherParams.create({
+                    ciphertext: ciphertextBytes
+                });
+                
+                // 使用AES-256-CBC解密
+                const decrypted = CryptoJS.AES.decrypt(cipherParams, key, {
+                    iv: iv,
+                    mode: CryptoJS.mode.CBC,
+                    padding: CryptoJS.pad.Pkcs7
+                });
+                
+                // 转换为UTF-8字符串
+                const plaintext = decrypted.toString(CryptoJS.enc.Utf8);
+                
+                if (!plaintext) {
+                    showStatus(statusEl, '解密失败，密码可能不正确', 'error');
+                    return;
+                }
+                
+                // 显示结果
+                document.getElementById('decryptedText').value = plaintext;
+                document.getElementById('decryptResultContainer').style.display = 'block';
+                
+                // 自动滚动到结果
+                document.getElementById('decryptResultContainer').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest' 
+                });
+                
+                showStatus(statusEl, '文本已成功解密！您现在可以复制内容', 'success');
+            } catch (error) {
+                console.error('解密错误:', error);
+                showStatus(statusEl, '解密过程中发生错误: 请检查输入格式和密码', 'error');
+            }
+        }
+        
+        // 显示状态消息
+        function showStatus(element, message, type) {
+            element.textContent = message;
+            element.className = `status-message ${type}`;
+            
+            // 5秒后隐藏消息
+            setTimeout(() => {
+                element.className = 'status-message';
+            }, 5000);
+        }
+        
+        // 复制文本到剪贴板
+        function copyText(elementId) {
+            const textarea = document.getElementById(elementId);
+            textarea.select();
+            document.execCommand('copy');
+            
+            // 显示成功消息
+            const statusEl = elementId === 'encryptedText' ? 
+                document.getElementById('encryptStatus') : 
+                document.getElementById('decryptStatus');
+                
+            showStatus(statusEl, '已复制到剪贴板！', 'success');
+        }
+        
+        // 清除所有输入
+        function clearAll() {
+            document.getElementById('plaintext').value = '';
+            document.getElementById('encryptPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            document.getElementById('ciphertext').value = '';
+            document.getElementById('decryptPassword').value = '';
+            document.getElementById('encryptedText').value = '';
+            document.getElementById('decryptedText').value = '';
+            
+            document.getElementById('encryptResultContainer').style.display = 'none';
+            document.getElementById('decryptResultContainer').style.display = 'none';
+            
+            document.getElementById('encryptStatus').className = 'status-message';
+            document.getElementById('decryptStatus').className = 'status-message';
+            
+            document.getElementById('strengthMeter').className = 'strength-meter';
+            
+            // 重置密码可见性图标
+            const eyeIcons = document.querySelectorAll('.password-toggle i');
+            eyeIcons.forEach(icon => {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            });
+            
+            // 重置密码框类型
+            const passwordInputs = document.querySelectorAll('input[type="text"][id$="Password"]');
+            passwordInputs.forEach(input => {
+                input.type = 'password';
+            });
+            
+            showStatus(document.getElementById('encryptStatus'), '所有内容已清除', 'success');
+        }
+        
+        // 密码强度检测
+        document.getElementById('encryptPassword').addEventListener('input', function() {
+            const password = this.value;
+            const strengthMeter = document.getElementById('strengthMeter');
+            
+            if (!password) {
+                strengthMeter.className = 'strength-meter';
+                return;
+            }
+            
+            // 密码强度检测
+            let strength = 0;
+            
+            // 长度至少8个字符
+            if (password.length >= 8) strength += 1;
+            
+            // 包含小写字母
+            if (/[a-z]/.test(password)) strength += 1;
+            
+            // 包含大写字母
+            if (/[A-Z]/.test(password)) strength += 1;
+            
+            // 包含数字
+            if (/\d/.test(password)) strength += 1;
+            
+            // 包含特殊字符
+            if (/[^a-zA-Z0-9]/.test(password)) strength += 1;
+            
+            // 更新强度指示器
+            if (strength < 3) {
+                strengthMeter.className = 'strength-meter weak';
+            } else if (strength < 5) {
+                strengthMeter.className = 'strength-meter medium';
+            } else {
+                strengthMeter.className = 'strength-meter strong';
+            }
+        });
+        
+        // 页面加载时初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            // 示例文本
+            document.getElementById('plaintext').placeholder = "例如: 我是练习时长两年半的个人练习生蔡徐坤，喜欢唱、跳、rap、篮球，music！";
+        });
+    </script>
+</body>
+</html>
