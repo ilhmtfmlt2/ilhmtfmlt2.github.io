@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>中国移动流量活动导航</title>
+    <title>中国移动福利领取中心</title>
     <style>
-        /* 基础样式 */
+        /* 现代化简洁设计 */
         :root {
-            --primary: #157efb;
-            --primary-dark: #0a5ec9;
-            --secondary: #f0f7ff;
-            --accent: #ff6b6b;
-            --text: #333;
-            --text-light: #666;
-            --border: #e1e8f0;
-            --card-bg: #fff;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
-            --radius: 10px;
+            --flow-color: #1a73e8;
+            --call-color: #0d9d58; 
+            --cash-color: #f9ab00;
+            --card-color: #673ab7;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #202124;
+            --text-light: #5f6368;
+            --border: #dadce0;
+            --radius: 12px;
+            --shadow: 0 2px 6px rgba(0,0,0,0.05);
+            --shadow-hover: 0 8px 25px rgba(26,115,232,0.12);
         }
         
         * {
@@ -27,12 +28,12 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
-            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-color);
             color: var(--text);
-            background: linear-gradient(135deg, #f5f9ff 0%, #e8f1ff 100%);
-            min-height: 100vh;
+            line-height: 1.5;
             padding: 20px;
+            min-height: 100vh;
         }
         
         .container {
@@ -40,58 +41,57 @@
             margin: 0 auto;
         }
         
-        /* 头部 */
-        header {
+        /* 顶部区域 */
+        .header {
             text-align: center;
-            padding: 2rem 1.5rem;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border-radius: var(--radius);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .logo {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: inline-block;
+            padding: 30px 20px 20px;
         }
         
         h1 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 8px;
+            font-weight: 600;
         }
         
         .subtitle {
+            color: var(--text-light);
             font-size: 1rem;
-            opacity: 0.9;
-            margin-bottom: 1rem;
+            margin-bottom: 25px;
         }
         
-        /* 统计信息 */
+        /* 统计卡片 */
         .stats {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
+            gap: 15px;
             flex-wrap: wrap;
+            margin-bottom: 30px;
         }
         
         .stat-item {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.6rem 1.2rem;
-            border-radius: 20px;
+            background: var(--card-bg);
+            padding: 12px 20px;
+            border-radius: var(--radius);
             font-size: 0.9rem;
+            color: var(--text-light);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: var(--flow-color);
         }
         
         /* 活动网格 */
         .activities-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            gap: 20px;
+            margin-bottom: 40px;
         }
         
         /* 活动卡片 */
@@ -100,7 +100,7 @@
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: var(--shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             border: 1px solid var(--border);
         }
         
@@ -109,74 +109,155 @@
             box-shadow: var(--shadow-hover);
         }
         
+        /* 根据类型设置顶部颜色 */
+        .card-type-flow { border-top: 4px solid var(--flow-color); }
+        .card-type-call { border-top: 4px solid var(--call-color); }
+        .card-type-cash { border-top: 4px solid var(--cash-color); }
+        .card-type-card { border-top: 4px solid var(--card-color); }
+        
         .card-header {
-            padding: 1.2rem 1.2rem 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 20px 20px 15px;
         }
         
-        .card-badge {
-            background: linear-gradient(135deg, var(--accent), #ff8e8e);
-            color: white;
-            padding: 0.2rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
+        .card-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
         }
         
         .card-title {
             font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary);
+            font-weight: 600;
+            color: var(--text);
         }
         
-        .card-body {
-            padding: 0 1.2rem 1rem;
+        .card-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
         
+        .badge-flow { background: rgba(26, 115, 232, 0.1); color: var(--flow-color); }
+        .badge-call { background: rgba(13, 157, 88, 0.1); color: var(--call-color); }
+        .badge-cash { background: rgba(249, 171, 0, 0.1); color: var(--cash-color); }
+        .badge-card { background: rgba(103, 58, 183, 0.1); color: var(--card-color); }
+        
+        /* 领取内容展示 */
         .card-content {
+            text-align: center;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #f8f9ff, #f0f3ff);
+            margin: 0 20px 15px;
+            border-radius: 8px;
+        }
+        
+        .content-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+        
+        .amount-flow { color: var(--flow-color); }
+        .amount-call { color: var(--call-color); }
+        .amount-cash { color: var(--cash-color); }
+        .amount-card { color: var(--card-color); }
+        
+        .content-desc {
+            font-size: 1rem;
             color: var(--text-light);
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
+        }
+        
+        /* 详细信息 */
+        .card-details {
+            padding: 0 20px 20px;
+        }
+        
+        .detail-item {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .detail-label {
+            width: 60px;
+            color: var(--text-light);
+        }
+        
+        .detail-value {
+            color: var(--text);
+            font-weight: 500;
+        }
+        
+        /* 按钮区域 */
+        .card-footer {
+            padding: 0 20px 20px;
         }
         
         .card-note {
-            font-size: 0.85rem;
-            color: #888;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            background: rgba(0,0,0,0.02);
+            border-radius: 6px;
         }
         
-        .card-footer {
-            padding: 0 1.2rem 1.2rem;
-        }
-        
-        .visit-btn {
+        .btn-go {
             display: block;
             width: 100%;
-            padding: 0.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 12px;
+            background: var(--flow-color);
             color: white;
             text-align: center;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 600;
             font-size: 0.95rem;
             transition: all 0.3s ease;
         }
         
-        .visit-btn:hover {
+        .btn-go:hover {
+            background: #0d62d9;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(21, 126, 251, 0.3);
         }
         
         /* 页脚 */
         footer {
             text-align: center;
-            padding: 2rem 1rem;
+            padding: 25px 20px;
             color: var(--text-light);
             font-size: 0.9rem;
             border-top: 1px solid var(--border);
-            margin-top: 2rem;
+            margin-top: 20px;
+        }
+        
+        .update-time {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+        
+        /* 加载状态 */
+        .loading {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-light);
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(26, 115, 232, 0.1);
+            border-top: 3px solid var(--flow-color);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         /* 响应式 */
@@ -186,89 +267,92 @@
             }
             
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
             
             .stats {
-                gap: 1rem;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-item {
+                width: 100%;
+                max-width: 300px;
             }
         }
         
-        /* 加载动画 */
-        .loading {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-light);
-        }
-        
-        .spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(21, 126, 251, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 1rem;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .content-amount {
+                font-size: 1.6rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="logo">📱</div>
-            <h1>中国移动流量活动导航</h1>
-            <p class="subtitle">一键直达 | 实时更新 | 手机电脑通用</p>
+        <div class="header">
+            <h1>📱 中国移动福利领取</h1>
+            <p class="subtitle">领取流量、通话、话费，每日更新可用活动</p>
             
             <div class="stats">
                 <div class="stat-item">
-                    <span>活动数量: </span>
-                    <strong id="activity-count">0</strong>
+                    <span>活动总数:</span>
+                    <span class="stat-value" id="total-count">0</span>
                 </div>
                 <div class="stat-item">
-                    <span>最后更新: </span>
-                    <strong id="update-date">2024-01-01</strong>
+                    <span>今日更新:</span>
+                    <span class="stat-value" id="today-date">2024-05-01</span>
+                </div>
+                <div class="stat-item">
+                    <span>状态:</span>
+                    <span class="stat-value">正常</span>
                 </div>
             </div>
-        </header>
+        </div>
         
         <main>
             <div id="activities-list" class="activities-grid">
                 <div class="loading">
                     <div class="spinner"></div>
-                    <p>正在加载活动数据...</p>
+                    <p>正在加载福利活动...</p>
                 </div>
             </div>
         </main>
         
         <footer>
-            <p>© 2024 中国移动流量活动导航 | 本页面仅作导航用途</p>
-            <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #999;">数据来源: data.json | 无外部依赖</p>
+            <p>本页面仅汇总中国移动官方及合作方福利活动链接</p>
+            <p>活动最终解释权归中国移动及相关活动方所有</p>
+            <div class="update-time" id="update-time"></div>
         </footer>
     </div>
 
     <script>
-        // 加载并显示活动数据
+        // 从data.json加载活动数据
         async function loadActivities() {
             try {
                 const response = await fetch('data.json');
                 const data = await response.json();
                 
                 // 更新统计信息
-                document.getElementById('activity-count').textContent = data.activities.length;
-                document.getElementById('update-date').textContent = data.lastUpdate;
+                document.getElementById('total-count').textContent = data.activities.length;
+                document.getElementById('today-date').textContent = data.lastUpdate;
                 
                 // 显示活动
                 displayActivities(data.activities);
                 
+                // 更新页面时间
+                const now = new Date();
+                const timeStr = `最后加载: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+                document.getElementById('update-time').textContent = timeStr;
+                
             } catch (error) {
                 console.error('加载数据失败:', error);
                 document.getElementById('activities-list').innerHTML = 
-                    '<div class="loading">加载数据失败，请确保data.json文件存在</div>';
+                    '<div class="loading">数据加载失败，请确保data.json文件存在</div>';
             }
         }
         
@@ -277,32 +361,71 @@
             const container = document.getElementById('activities-list');
             container.innerHTML = '';
             
+            // 按类型统计
+            let flowCount = 0, callCount = 0, cashCount = 0, cardCount = 0;
+            
             activities.forEach(activity => {
-                const card = document.createElement('div');
-                card.className = 'activity-card';
+                // 统计各类活动数量
+                if (activity.type === '流量') flowCount++;
+                else if (activity.type === '通话') callCount++;
+                else if (activity.type === '话费') cashCount++;
+                else if (activity.type === '办卡') cardCount++;
                 
-                // 根据活动类型设置徽章
-                let badgeText = "官方活动";
-                if (activity.note.includes("短链接")) badgeText = "快速直达";
-                if (activity.note.includes("流量卡")) badgeText = "办卡专区";
-                if (activity.title.includes("河南")) badgeText = "地区专享";
+                // 确定卡片样式类
+                let typeClass = '', badgeClass = '', amountClass = '';
+                if (activity.type === '流量') {
+                    typeClass = 'card-type-flow';
+                    badgeClass = 'badge-flow';
+                    amountClass = 'amount-flow';
+                } else if (activity.type === '通话') {
+                    typeClass = 'card-type-call';
+                    badgeClass = 'badge-call';
+                    amountClass = 'amount-call';
+                } else if (activity.type === '话费') {
+                    typeClass = 'card-type-cash';
+                    badgeClass = 'badge-cash';
+                    amountClass = 'amount-cash';
+                } else if (activity.type === '办卡') {
+                    typeClass = 'card-type-card';
+                    badgeClass = 'badge-card';
+                    amountClass = 'amount-card';
+                }
+                
+                const card = document.createElement('div');
+                card.className = `activity-card ${typeClass}`;
                 
                 card.innerHTML = `
                     <div class="card-header">
-                        <div class="card-title">${activity.title}</div>
-                        <div class="card-badge">${badgeText}</div>
+                        <div class="card-title-row">
+                            <div class="card-title">${activity.title}</div>
+                            <div class="card-badge ${badgeClass}">${activity.type}</div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="card-content">${activity.content}</div>
-                        <div class="card-note">${activity.note}</div>
+                    
+                    <div class="card-content">
+                        <div class="content-amount ${amountClass}">${activity.amount}</div>
+                        <div class="content-desc">${activity.content}</div>
                     </div>
+                    
+                    <div class="card-details">
+                        <div class="detail-item">
+                            <span class="detail-label">有效期:</span>
+                            <span class="detail-value">${activity.validity}</span>
+                        </div>
+                    </div>
+                    
                     <div class="card-footer">
-                        <a href="${activity.link}" target="_blank" class="visit-btn">立即领取</a>
+                        <div class="card-note">${activity.note}</div>
+                        <a href="${activity.link}" target="_blank" class="btn-go">立即领取</a>
                     </div>
                 `;
                 
                 container.appendChild(card);
             });
+            
+            // 更新统计显示
+            document.querySelectorAll('.stat-item')[0].innerHTML = 
+                `<span>活动总数:</span><span class="stat-value">${activities.length}</span>`;
         }
         
         // 页面加载完成后执行
