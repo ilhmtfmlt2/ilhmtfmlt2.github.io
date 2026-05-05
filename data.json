@@ -1,96 +1,135 @@
 {
-  "lastUpdate": "2024-01-01",
+  "lastUpdate": "2024-05-01",
   "activities": [
     {
       "id": 1,
       "title": "活动一",
-      "content": "领取流量/话费",
+      "type": "流量",
+      "amount": "2GB",
+      "validity": "7天",
+      "content": "领取2GB国内流量",
       "link": "http://t.6-y.cn/7qMcaZ",
-      "note": "短链接"
+      "note": "短链接 | 所有用户可领"
     },
     {
       "id": 2,
-      "title": "活动二",
-      "content": "领取流量/礼包",
+      "title": "活动二", 
+      "type": "流量",
+      "amount": "5GB",
+      "validity": "30天",
+      "content": "领取5GB国内流量",
       "link": "https://wx.10086.cn/qwhdhub/leadin/1025020810?A_C_CODE=1DJicGPBGv&channelId=P00000111791#",
-      "note": "中国移动官方链接"
+      "note": "官方链接 | 需登录"
     },
     {
       "id": 3,
       "title": "活动三",
-      "content": "领取流量/礼包",
+      "type": "通话",
+      "amount": "100分钟",
+      "validity": "30天", 
+      "content": "领取100分钟国内通话",
       "link": "https://wx.10086.cn/qwhdhub/leadin/1025062458?A_C_CODE=Ui7TNJZGxP&channelId=P00000111984#/",
-      "note": "中国移动官方链接"
+      "note": "官方链接 | 需登录"
     },
     {
       "id": 4,
       "title": "活动四",
-      "content": "领取流量/礼包",
+      "type": "流量",
+      "amount": "3GB",
+      "validity": "15天",
+      "content": "领取3GB国内流量",
       "link": "https://wx.10086.cn/qwhdhub/leadin/1025062454?A_C_CODE=TE7X5lf1UW&channelId=P00000110812#/",
-      "note": "中国移动官方链接"
+      "note": "官方链接 | 需登录"
     },
     {
       "id": 5,
       "title": "活动五",
-      "content": "领取流量/礼包",
+      "type": "话费",
+      "amount": "5元",
+      "validity": "立即到账",
+      "content": "抽取5元话费券",
       "link": "https://dev.coc.10086.cn/coc3/canvas/rlightsmarket-h5-canvas/online/tjhId?channelCode=P00000131192&pageRecord=true",
-      "note": "中国移动官方链接"
+      "note": "官方链接 | 抽奖活动"
     },
     {
       "id": 6,
       "title": "活动六",
-      "content": "领取流量/礼包",
+      "type": "流量",
+      "amount": "1GB",
+      "validity": "3天",
+      "content": "领取1GB国内流量",
       "link": "https://qr24.cn/FZYUGN",
-      "note": "短链接"
+      "note": "短链接 | 快速领取"
     },
     {
       "id": 7,
       "title": "活动七",
-      "content": "领取流量/礼包",
+      "type": "流量",
+      "amount": "10GB",
+      "validity": "30天",
+      "content": "领取10GB定向流量",
       "link": "http://t.6-y.cn/7DiRjH",
-      "note": "短链接"
+      "note": "短链接 | 定向流量"
     },
     {
       "id": 8,
       "title": "活动八",
-      "content": "领取流量/礼包",
+      "type": "通话", 
+      "amount": "50分钟",
+      "validity": "15天",
+      "content": "领取50分钟国内通话",
       "link": "http://8-h.cn/znMwqV",
-      "note": "短链接"
+      "note": "短链接 | 所有用户"
     },
     {
       "id": 9,
       "title": "活动九",
-      "content": "领取流量/礼包",
+      "type": "流量",
+      "amount": "2GB",
+      "validity": "7天",
+      "content": "领取2GB夜间流量",
       "link": "http://8-h.cn/znSa8Q",
-      "note": "短链接"
+      "note": "短链接 | 夜间专用"
     },
     {
       "id": 10,
       "title": "活动十",
-      "content": "领取流量/礼包",
+      "type": "流量",
+      "amount": "20GB",
+      "validity": "30天",
+      "content": "领取20GB校园流量",
       "link": "http://8-h.cn/znuPLD",
-      "note": "短链接"
+      "note": "短链接 | 校园区域"
     },
     {
       "id": 11,
       "title": "活动十一",
-      "content": "领取流量/礼包",
+      "type": "话费",
+      "amount": "2元",
+      "validity": "立即到账",
+      "content": "领取2元话费券",
       "link": "http://t.6-y.cn/7Di8Eb",
-      "note": "短链接"
+      "note": "短链接 | 小额度"
     },
     {
       "id": 12,
       "title": "活动十二",
-      "content": "流量卡办理",
+      "type": "办卡",
+      "amount": "200GB",
+      "validity": "月包",
+      "content": "办理大流量卡",
       "link": "https://172.lot-ml.com/ProductEn/Index/cce02fa1bc353995",
-      "note": "需在浏览器打开"
+      "note": "需浏览器打开 | 非官方"
     },
     {
       "id": 13,
       "title": "河南移动好礼",
-      "content": "河南移动用户专享",
+      "type": "流量",
+      "amount": "5GB",
+      "validity": "30天",
+      "content": "河南用户专享5GB",
       "link": "https://caiyun.feixin.10086.cn:7071/portal/hecaiyunPage/index.html?path=henanHaoli#/henanHaoli",
-      "note": "河南移动官方活动"
+      "note": "地区活动 | 河南用户"
     }
   ]
 }
