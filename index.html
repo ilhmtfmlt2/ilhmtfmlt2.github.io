@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>中国移动福利领取中心</title>
+    <title>中国移动福利分类领取</title>
     <style>
-        /* 现代化简洁设计 */
+        /* 现代化分类设计 */
         :root {
             --flow-color: #1a73e8;
-            --call-color: #0d9d58; 
+            --flow-light: rgba(26, 115, 232, 0.1);
+            --call-color: #0d9d58;
+            --call-light: rgba(13, 157, 88, 0.1);
             --cash-color: #f9ab00;
-            --card-color: #673ab7;
+            --cash-light: rgba(249, 171, 0, 0.1);
+            --other-color: #673ab7;
+            --other-light: rgba(103, 58, 183, 0.1);
             --bg-color: #f8f9fa;
             --card-bg: #ffffff;
             --text: #202124;
@@ -18,7 +22,7 @@
             --border: #dadce0;
             --radius: 12px;
             --shadow: 0 2px 6px rgba(0,0,0,0.05);
-            --shadow-hover: 0 8px 25px rgba(26,115,232,0.12);
+            --shadow-hover: 0 8px 25px rgba(0,0,0,0.12);
         }
         
         * {
@@ -60,30 +64,124 @@
             margin-bottom: 25px;
         }
         
-        /* 统计卡片 */
-        .stats {
+        /* 分类标签 */
+        .tabs-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 10px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
         
-        .stat-item {
-            background: var(--card-bg);
-            padding: 12px 20px;
+        .tab {
+            padding: 12px 24px;
+            background: white;
             border-radius: var(--radius);
-            font-size: 0.9rem;
-            color: var(--text-light);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
             box-shadow: var(--shadow);
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
-        .stat-value {
+        .tab:hover {
+            transform: translateY(-3px);
+        }
+        
+        .tab.active {
+            color: white;
+        }
+        
+        .tab-flow { border: 2px solid var(--flow-color); color: var(--flow-color); }
+        .tab-flow.active { background: var(--flow-color); }
+        
+        .tab-cash { border: 2px solid var(--cash-color); color: var(--cash-color); }
+        .tab-cash.active { background: var(--cash-color); }
+        
+        .tab-other { border: 2px solid var(--other-color); color: var(--other-color); }
+        .tab-other.active { background: var(--other-color); }
+        
+        .tab-count {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+        
+        .active .tab-count {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* 分类内容区域 */
+        .category-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .category-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid;
+        }
+        
+        .header-flow { border-color: var(--flow-color); }
+        .header-cash { border-color: var(--cash-color); }
+        .header-other { border-color: var(--other-color); }
+        
+        .category-title {
+            font-size: 1.5rem;
             font-weight: 600;
-            color: var(--flow-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .title-flow { color: var(--flow-color); }
+        .title-cash { color: var(--cash-color); }
+        .title-other { color: var(--other-color); }
+        
+        .category-count {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        /* 搜索筛选 */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+        
+        .search-btn {
+            padding: 12px 20px;
+            background: var(--flow-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
         }
         
         /* 活动网格 */
@@ -109,12 +207,7 @@
             box-shadow: var(--shadow-hover);
         }
         
-        /* 根据类型设置顶部颜色 */
-        .card-type-flow { border-top: 4px solid var(--flow-color); }
-        .card-type-call { border-top: 4px solid var(--call-color); }
-        .card-type-cash { border-top: 4px solid var(--cash-color); }
-        .card-type-card { border-top: 4px solid var(--card-color); }
-        
+        /* 卡片顶部 */
         .card-header {
             padding: 20px 20px 15px;
         }
@@ -139,19 +232,23 @@
             font-weight: 600;
         }
         
-        .badge-flow { background: rgba(26, 115, 232, 0.1); color: var(--flow-color); }
-        .badge-call { background: rgba(13, 157, 88, 0.1); color: var(--call-color); }
-        .badge-cash { background: rgba(249, 171, 0, 0.1); color: var(--cash-color); }
-        .badge-card { background: rgba(103, 58, 183, 0.1); color: var(--card-color); }
+        .badge-flow { background: var(--flow-light); color: var(--flow-color); }
+        .badge-call { background: var(--call-light); color: var(--call-color); }
+        .badge-cash { background: var(--cash-light); color: var(--cash-color); }
+        .badge-other { background: var(--other-light); color: var(--other-color); }
         
-        /* 领取内容展示 */
+        /* 领取内容 */
         .card-content {
             text-align: center;
             padding: 15px 20px;
-            background: linear-gradient(135deg, #f8f9ff, #f0f3ff);
             margin: 0 20px 15px;
             border-radius: 8px;
         }
+        
+        .content-flow { background: var(--flow-light); }
+        .content-call { background: var(--call-light); }
+        .content-cash { background: var(--cash-light); }
+        .content-other { background: var(--other-light); }
         
         .content-amount {
             font-size: 2rem;
@@ -162,7 +259,7 @@
         .amount-flow { color: var(--flow-color); }
         .amount-call { color: var(--call-color); }
         .amount-cash { color: var(--cash-color); }
-        .amount-card { color: var(--card-color); }
+        .amount-other { color: var(--other-color); }
         
         .content-desc {
             font-size: 1rem;
@@ -260,6 +357,14 @@
             to { transform: rotate(360deg); }
         }
         
+        /* 无结果提示 */
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+        
         /* 响应式 */
         @media (max-width: 768px) {
             .activities-grid {
@@ -270,14 +375,19 @@
                 font-size: 1.6rem;
             }
             
-            .stats {
+            .tabs-container {
                 flex-direction: column;
-                align-items: center;
+                align-items: stretch;
             }
             
-            .stat-item {
-                width: 100%;
-                max-width: 300px;
+            .category-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .search-box {
+                flex-direction: column;
             }
         }
         
@@ -295,30 +405,84 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📱 中国移动福利领取</h1>
-            <p class="subtitle">领取流量、通话、话费，每日更新可用活动</p>
-            
-            <div class="stats">
-                <div class="stat-item">
-                    <span>活动总数:</span>
-                    <span class="stat-value" id="total-count">0</span>
-                </div>
-                <div class="stat-item">
-                    <span>今日更新:</span>
-                    <span class="stat-value" id="today-date">2024-05-01</span>
-                </div>
-                <div class="stat-item">
-                    <span>状态:</span>
-                    <span class="stat-value">正常</span>
-                </div>
+            <h1>📱 中国移动福利分类领取</h1>
+            <p class="subtitle">按类别查找，快速领取流量、话费及其他福利</p>
+        </div>
+        
+        <!-- 分类标签 -->
+        <div class="tabs-container">
+            <div class="tab tab-flow active" data-category="flow">
+                <span>流量专区</span>
+                <span class="tab-count" id="flow-count">0</span>
+            </div>
+            <div class="tab tab-cash" data-category="cash">
+                <span>话费专区</span>
+                <span class="tab-count" id="cash-count">0</span>
+            </div>
+            <div class="tab tab-other" data-category="other">
+                <span>其他专区</span>
+                <span class="tab-count" id="other-count">0</span>
             </div>
         </div>
         
         <main>
-            <div id="activities-list" class="activities-grid">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>正在加载福利活动...</p>
+            <!-- 流量专区 -->
+            <div class="category-section active" id="flow-section">
+                <div class="category-header header-flow">
+                    <h2 class="category-title title-flow">📶 流量专区</h2>
+                    <div class="category-count" id="flow-count-text">共 0 个活动</div>
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" class="search-input" id="flow-search" placeholder="搜索流量活动...">
+                    <button class="search-btn" onclick="searchInCategory('flow')">搜索</button>
+                </div>
+                
+                <div class="activities-grid" id="flow-activities">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>正在加载流量活动...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 话费专区 -->
+            <div class="category-section" id="cash-section">
+                <div class="category-header header-cash">
+                    <h2 class="category-title title-cash">💰 话费专区</h2>
+                    <div class="category-count" id="cash-count-text">共 0 个活动</div>
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" class="search-input" id="cash-search" placeholder="搜索话费活动...">
+                    <button class="search-btn" onclick="searchInCategory('cash')">搜索</button>
+                </div>
+                
+                <div class="activities-grid" id="cash-activities">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>正在加载话费活动...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 其他专区 -->
+            <div class="category-section" id="other-section">
+                <div class="category-header header-other">
+                    <h2 class="category-title title-other">🎯 其他专区</h2>
+                    <div class="category-count" id="other-count-text">共 0 个活动</div>
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" class="search-input" id="other-search" placeholder="搜索其他活动...">
+                    <button class="search-btn" onclick="searchInCategory('other')">搜索</button>
+                </div>
+                
+                <div class="activities-grid" id="other-activities">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>正在加载其他活动...</p>
+                    </div>
                 </div>
             </div>
         </main>
@@ -331,105 +495,221 @@
     </div>
 
     <script>
+        // 全局变量存储活动数据
+        let allActivities = [];
+        let filteredActivities = {
+            flow: [],
+            cash: [],
+            other: []
+        };
+        
         // 从data.json加载活动数据
         async function loadActivities() {
             try {
                 const response = await fetch('data.json');
                 const data = await response.json();
+                allActivities = data.activities;
                 
-                // 更新统计信息
-                document.getElementById('total-count').textContent = data.activities.length;
-                document.getElementById('today-date').textContent = data.lastUpdate;
+                // 分类活动
+                categorizeActivities(allActivities);
                 
-                // 显示活动
-                displayActivities(data.activities);
+                // 显示默认分类（流量专区）
+                displayActivitiesByCategory('flow');
                 
                 // 更新页面时间
                 const now = new Date();
-                const timeStr = `最后加载: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+                const timeStr = `最后更新: ${data.lastUpdate} | 加载时间: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
                 document.getElementById('update-time').textContent = timeStr;
+                
+                // 为搜索框添加回车键支持
+                setupSearchInputs();
                 
             } catch (error) {
                 console.error('加载数据失败:', error);
-                document.getElementById('activities-list').innerHTML = 
-                    '<div class="loading">数据加载失败，请确保data.json文件存在</div>';
+                document.querySelectorAll('.activities-grid').forEach(grid => {
+                    grid.innerHTML = '<div class="loading">数据加载失败，请确保data.json文件存在</div>';
+                });
             }
         }
         
-        // 显示活动卡片
-        function displayActivities(activities) {
-            const container = document.getElementById('activities-list');
-            container.innerHTML = '';
+        // 分类活动
+        function categorizeActivities(activities) {
+            // 重置分类
+            filteredActivities = {
+                flow: [],
+                cash: [],
+                other: []
+            };
             
-            // 按类型统计
-            let flowCount = 0, callCount = 0, cashCount = 0, cardCount = 0;
+            // 统计各类活动数量
+            let flowCount = 0, cashCount = 0, otherCount = 0;
             
             activities.forEach(activity => {
-                // 统计各类活动数量
-                if (activity.type === '流量') flowCount++;
-                else if (activity.type === '通话') callCount++;
-                else if (activity.type === '话费') cashCount++;
-                else if (activity.type === '办卡') cardCount++;
-                
-                // 确定卡片样式类
-                let typeClass = '', badgeClass = '', amountClass = '';
+                // 根据type分类
                 if (activity.type === '流量') {
-                    typeClass = 'card-type-flow';
-                    badgeClass = 'badge-flow';
-                    amountClass = 'amount-flow';
-                } else if (activity.type === '通话') {
-                    typeClass = 'card-type-call';
-                    badgeClass = 'badge-call';
-                    amountClass = 'amount-call';
+                    filteredActivities.flow.push(activity);
+                    flowCount++;
                 } else if (activity.type === '话费') {
-                    typeClass = 'card-type-cash';
-                    badgeClass = 'badge-cash';
-                    amountClass = 'amount-cash';
-                } else if (activity.type === '办卡') {
-                    typeClass = 'card-type-card';
-                    badgeClass = 'badge-card';
-                    amountClass = 'amount-card';
+                    filteredActivities.cash.push(activity);
+                    cashCount++;
+                } else {
+                    // 通话、办卡等其他类型都归到"其他"
+                    filteredActivities.other.push(activity);
+                    otherCount++;
                 }
-                
-                const card = document.createElement('div');
-                card.className = `activity-card ${typeClass}`;
-                
-                card.innerHTML = `
-                    <div class="card-header">
-                        <div class="card-title-row">
-                            <div class="card-title">${activity.title}</div>
-                            <div class="card-badge ${badgeClass}">${activity.type}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="card-content">
-                        <div class="content-amount ${amountClass}">${activity.amount}</div>
-                        <div class="content-desc">${activity.content}</div>
-                    </div>
-                    
-                    <div class="card-details">
-                        <div class="detail-item">
-                            <span class="detail-label">有效期:</span>
-                            <span class="detail-value">${activity.validity}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="card-footer">
-                        <div class="card-note">${activity.note}</div>
-                        <a href="${activity.link}" target="_blank" class="btn-go">立即领取</a>
-                    </div>
-                `;
-                
-                container.appendChild(card);
             });
             
-            // 更新统计显示
-            document.querySelectorAll('.stat-item')[0].innerHTML = 
-                `<span>活动总数:</span><span class="stat-value">${activities.length}</span>`;
+            // 更新标签计数
+            document.getElementById('flow-count').textContent = flowCount;
+            document.getElementById('cash-count').textContent = cashCount;
+            document.getElementById('other-count').textContent = otherCount;
+            
+            // 更新分类标题计数
+            document.getElementById('flow-count-text').textContent = `共 ${flowCount} 个活动`;
+            document.getElementById('cash-count-text').textContent = `共 ${cashCount} 个活动`;
+            document.getElementById('other-count-text').textContent = `共 ${otherCount} 个活动`;
+        }
+        
+        // 显示指定分类的活动
+        function displayActivitiesByCategory(category, searchTerm = '') {
+            const containerId = `${category}-activities`;
+            const container = document.getElementById(containerId);
+            
+            // 获取该分类的活动
+            let activities = filteredActivities[category];
+            
+            // 如果有搜索词，进行筛选
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                activities = activities.filter(activity => 
+                    activity.title.toLowerCase().includes(term) ||
+                    activity.content.toLowerCase().includes(term) ||
+                    activity.note.toLowerCase().includes(term) ||
+                    activity.amount.toLowerCase().includes(term)
+                );
+            }
+            
+            // 清空容器
+            container.innerHTML = '';
+            
+            // 如果没有活动
+            if (activities.length === 0) {
+                container.innerHTML = '<div class="no-results">未找到匹配的活动</div>';
+                return;
+            }
+            
+            // 显示活动卡片
+            activities.forEach(activity => {
+                const card = createActivityCard(activity, category);
+                container.appendChild(card);
+            });
+        }
+        
+        // 创建活动卡片
+        function createActivityCard(activity, category) {
+            // 确定卡片样式
+            let badgeClass = '', contentClass = '', amountClass = '';
+            
+            if (activity.type === '流量') {
+                badgeClass = 'badge-flow';
+                contentClass = 'content-flow';
+                amountClass = 'amount-flow';
+            } else if (activity.type === '通话') {
+                badgeClass = 'badge-call';
+                contentClass = 'content-call';
+                amountClass = 'amount-call';
+            } else if (activity.type === '话费') {
+                badgeClass = 'badge-cash';
+                contentClass = 'content-cash';
+                amountClass = 'amount-cash';
+            } else {
+                badgeClass = 'badge-other';
+                contentClass = 'content-other';
+                amountClass = 'amount-other';
+            }
+            
+            const card = document.createElement('div');
+            card.className = 'activity-card';
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <div class="card-title-row">
+                        <div class="card-title">${activity.title}</div>
+                        <div class="card-badge ${badgeClass}">${activity.type}</div>
+                    </div>
+                </div>
+                
+                <div class="card-content ${contentClass}">
+                    <div class="content-amount ${amountClass}">${activity.amount}</div>
+                    <div class="content-desc">${activity.content}</div>
+                </div>
+                
+                <div class="card-details">
+                    <div class="detail-item">
+                        <span class="detail-label">有效期:</span>
+                        <span class="detail-value">${activity.validity}</span>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="card-note">${activity.note}</div>
+                    <a href="${activity.link}" target="_blank" class="btn-go">立即领取</a>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // 切换分类标签
+        function switchCategory(category) {
+            // 更新标签状态
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`.tab-${category}`).classList.add('active');
+            
+            // 更新内容区域
+            document.querySelectorAll('.category-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`${category}-section`).classList.add('active');
+            
+            // 显示该分类的活动
+            const searchInput = document.getElementById(`${category}-search`);
+            displayActivitiesByCategory(category, searchInput.value);
+        }
+        
+        // 在分类内搜索
+        function searchInCategory(category) {
+            const searchInput = document.getElementById(`${category}-search`);
+            displayActivitiesByCategory(category, searchInput.value);
+        }
+        
+        // 设置搜索框回车键支持
+        function setupSearchInputs() {
+            ['flow-search', 'cash-search', 'other-search'].forEach(inputId => {
+                const input = document.getElementById(inputId);
+                input.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        const category = inputId.split('-')[0];
+                        searchInCategory(category);
+                    }
+                });
+            });
         }
         
         // 页面加载完成后执行
-        document.addEventListener('DOMContentLoaded', loadActivities);
+        document.addEventListener('DOMContentLoaded', function() {
+            loadActivities();
+            
+            // 绑定标签点击事件
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    switchCategory(category);
+                });
+            });
+        });
     </script>
 </body>
 </html>
